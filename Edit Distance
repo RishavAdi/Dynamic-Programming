@@ -1,0 +1,29 @@
+//Recursive way
+class Solution {
+public:
+int solveUsingRec(string& a, string& b,int i,int j){
+    if(i==a.length())
+    return b.length()-j;
+    if(j==b.length())
+    return a.length()-i;
+    int ans=0;
+    if(a[i]==b[j])
+    return solveUsingRec(a,b,i+1,j+1);
+    else{
+        int replace=1+solveUsingRec(a,b,i+1,j+1);
+        int insert=1+solveUsingRec(a,b,i,j+1);
+        int delet=1+solveUsingRec(a,b,i+1,j);
+        ans=min(replace,min(insert,delet));
+    }
+    return ans;
+}
+    int minDistance(string word1, string word2) {
+        if(word1.length()==0)
+        return word2.length();
+        if(word2.length()==0)
+        return word1.length();
+        int i=0;
+        int j=0;
+        return solveUsingRec(word1,word2,i,j);
+    }
+};
