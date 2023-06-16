@@ -27,3 +27,72 @@ int solveUsingRec(string& a, string& b,int i,int j){
         return solveUsingRec(word1,word2,i,j);
     }
 };
+
+//Memoisation
+class Solution {
+public:
+int solveUsingMem(string& a, string& b,int i,int j,vector<vector<int>>&dp){
+    if(i==a.length())
+    return b.length()-j;
+    if(j==b.length())
+    return a.length()-i;
+    int ans=0;
+    if(dp[i][j]!=-1) return dp[i][j];
+    if(a[i]==b[j])
+    return solveUsingRec(a,b,i+1,j+1,dp);
+    else{
+        int replace=1+solveUsingMem(a,b,i+1,j+1,dp);
+        int insert=1+solveUsingMem(a,b,i,j+1,dp);
+        int delet=1+solveUsingMem(a,b,i+1,j,dp);
+        ans=min(replace,min(insert,delet));
+    }
+    return dp[i][j]=ans;
+}
+    int minDistance(string word1, string word2) {
+        int n1=word1.length();
+        int n2=word2.length();
+        vector<vector<int>>dp(n1+2,vector<int>(n2+2,-1));
+        if(n1==0)
+        return n2;
+        if(n2==0)
+        return n1;
+        int i=0;
+        int j=0;
+        return solveUsingMem(word1,word2,i,j,dp);
+    }
+};
+
+//Tabulation
+class Solution {
+public:
+int solveUsingTab(string  a, string b){
+    vector<vector<int>>dp(a.size()+2,vector<int>(b.size()+2,0));
+    for(int i=0;i<=a.size();i++){
+        dp[i][b.length()]=a.length()-i;
+}
+for(int j=0;j<=b.size();j++){
+    dp[a.length()][j]=b.length()-j;
+}
+for(int i=a.length()-1;i>=0;i--){
+    for(int j=b.length()-1;j>=0;j--){
+        int ans=0;
+    if(a[i]==b[j])
+     ans=dp[i+1][j+1];
+    else{
+        int replace=1+dp[i+1][j+1];
+        int insert=1+dp[i][j+1];
+        int delet=1+dp[i+1][j];
+        ans=min(replace,min(insert,delet));
+    }
+     dp[i][j]=ans;
+    }
+}
+return dp[0][0];
+}
+    int minDistance(string word1, string word2) {
+        return solveUsingTab(word1,word2);
+    }
+};
+
+//Space Optimization
+
